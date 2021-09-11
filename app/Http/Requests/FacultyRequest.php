@@ -38,7 +38,7 @@ class FacultyRequest extends FormRequest
                 'ShortNameRu' => 'required|unique:faculties,ShortNameRu|max:50',
             ];
         }
-        $facultyId = $this->query('faculty');
+        $facultyId = $this->route('faculty')->Id;
         return [
             'FullNameUz' => "required|unique:faculties,FullNameUz,{$facultyId},Id|max:255",
             'FullNameOz' => "required|unique:faculties,FullNameOz,{$facultyId},Id|max:255",
