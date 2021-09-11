@@ -90,6 +90,8 @@ class DepartmentController extends Controller
     }
 
     /**
+     * Delete
+     *
      * Удаление определенной кафедры
      *
      * @param Department $department

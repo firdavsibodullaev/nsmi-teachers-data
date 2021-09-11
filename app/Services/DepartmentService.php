@@ -42,7 +42,7 @@ class DepartmentService implements DepartmentInterface
      */
     public function create(array $validated)
     {
-        return Department::query()->create($validated);
+        return Department::query()->create($validated)->load('Faculty');
     }
 
     /**
@@ -54,7 +54,7 @@ class DepartmentService implements DepartmentInterface
      */
     public function update(Department $department, array $validated)
     {
-        return tap($department)->update($validated);
+        return tap($department)->update($validated)->load('faculty');
     }
 
     /**

@@ -21,13 +21,14 @@ class DepartmentRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return $this->getRules();
     }
 
     private function getRules(): array
     {
+        $facultyId = $this->input('FacultyId');
         if ($this->isMethod('post')) {
             return [
                 'FullNameUz' => 'required|unique:departments,FullNameUz|max:255',
@@ -36,7 +37,7 @@ class DepartmentRequest extends FormRequest
                 'ShortNameUz' => 'required|unique:departments,ShortNameUz|max:50',
                 'ShortNameOz' => 'required|unique:departments,ShortNameOz|max:50',
                 'ShortNameRu' => 'required|unique:departments,ShortNameRu|max:50',
-                'FacultyId' => 'required|integer|max:99999',
+                'FacultyId' => "required|integer|exists:faculties,Id",
             ];
         }
         $departmentId = $this->route('department')->Id;
@@ -47,7 +48,7 @@ class DepartmentRequest extends FormRequest
             'ShortNameUz' => "required|unique:departments,ShortNameUz,{$departmentId},Id|max:50",
             'ShortNameOz' => "required|unique:departments,ShortNameOz,{$departmentId},Id|max:50",
             'ShortNameRu' => "required|unique:departments,ShortNameRu,{$departmentId},Id|max:50",
-            'FacultyId' => 'required|integer|max:99999',
+            'FacultyId' => "required|integer|exists:faculties,Id",
         ];
     }
 }
