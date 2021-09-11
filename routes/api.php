@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::namespace('Api')->group(function () {
     Route::prefix('v1')->group(function () {
-        Route::apiResource('faculty', 'FacultyController');
+        Route::apiResources([
+            'faculty' => 'FacultyController',
+            'department' => 'DepartmentController'
+        ]);
     });
 });

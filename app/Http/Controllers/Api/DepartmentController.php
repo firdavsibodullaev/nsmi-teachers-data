@@ -3,83 +3,103 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DepartmentRequest;
+use App\Http\Resources\DepartmentResource;
+use App\Models\Department;
+use App\Services\DepartmentService;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
+/**
+ * Class DepartmentController
+ * @package App\Http\Controllers\Api
+ */
 class DepartmentController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @var DepartmentService
      */
-    public function index()
+    private $departmentService;
+
+    /**
+     * DepartmentController constructor.
+     * @param DepartmentService $departmentService
+     */
+    public function __construct(DepartmentService $departmentService)
     {
-        //
+        $this->departmentService = $departmentService;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Index
      *
-     * @return \Illuminate\Http\Response
+     * Список всех кафедр с возможностью филтра и пагинацией
+     * @return AnonymousResourceCollection
      */
-    public function create()
+    public function index(): AnonymousResourceCollection
     {
-        //
+        $departments = $this->departmentService->fetchAllWithPagination();
+        return DepartmentResource::collection($departments);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Создание новых кафедр
+     *
+     * @param DepartmentRequest $request
+     * @return DepartmentResource
      */
-    public function store(Request $request)
+    public function store(DepartmentRequest $request): DepartmentResource
     {
-        //
+        $department = $this->departmentService->create($request->validated());
+        return new DepartmentResource($department);
     }
 
     /**
-     * Display the specified resource.
+     * Show
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Выборка определенной кафедры
+     *
+     * @param Department $department
+     * @return DepartmentResource
      */
-    public function show($id)
+    public function show(Department $department): DepartmentResource
     {
-        //
+        return new DepartmentResource($department->load('faculty'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Update
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Изменение кафедры
+     *
+     * @param DepartmentRequest $request
+     * @param Department $department
+     * @return DepartmentResource
      */
-    public function edit($id)
+    public function update(DepartmentRequest $request, Department $department): DepartmentResource
     {
-        //
+        $department = $this->departmentService->update($department, $request->validated());
+        return new DepartmentResource($department);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Удаление определенной кафедры
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Department $department
+     * @return false|Application|ResponseFactory|Response
+     * @throws Exception
      */
-    public function update(Request $request, $id)
+    public function destroy(Department $department)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if ($this->departmentService->delete($department))
+            return response('', 204);
+        return false;
     }
 }

@@ -11,9 +11,9 @@ class DepartmentRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,31 @@ class DepartmentRequest extends FormRequest
      */
     public function rules()
     {
+        return $this->getRules();
+    }
+
+    private function getRules(): array
+    {
+        if ($this->isMethod('post')) {
+            return [
+                'FullNameUz' => 'required|unique:departments,FullNameUz|max:255',
+                'FullNameOz' => 'required|unique:departments,FullNameOz|max:255',
+                'FullNameRu' => 'required|unique:departments,FullNameRu|max:255',
+                'ShortNameUz' => 'required|unique:departments,ShortNameUz|max:50',
+                'ShortNameOz' => 'required|unique:departments,ShortNameOz|max:50',
+                'ShortNameRu' => 'required|unique:departments,ShortNameRu|max:50',
+                'FacultyId' => 'required|integer|max:99999',
+            ];
+        }
+        $departmentId = $this->route('department')->Id;
         return [
-            //
+            'FullNameUz' => "required|unique:departments,FullNameUz,{$departmentId},Id|max:255",
+            'FullNameOz' => "required|unique:departments,FullNameOz,{$departmentId},Id|max:255",
+            'FullNameRu' => "required|unique:departments,FullNameRu,{$departmentId},Id|max:255",
+            'ShortNameUz' => "required|unique:departments,ShortNameUz,{$departmentId},Id|max:50",
+            'ShortNameOz' => "required|unique:departments,ShortNameOz,{$departmentId},Id|max:50",
+            'ShortNameRu' => "required|unique:departments,ShortNameRu,{$departmentId},Id|max:50",
+            'FacultyId' => 'required|integer|max:99999',
         ];
     }
 }
