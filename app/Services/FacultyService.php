@@ -55,7 +55,7 @@ class FacultyService implements FacultyInterface
      */
     public function update(Faculty $faculty, array $validated)
     {
-        return tap($faculty)->update($validated);
+        return tap($faculty)->update($validated)->load('departments');
     }
 
     /**

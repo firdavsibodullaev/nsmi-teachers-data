@@ -63,6 +63,8 @@ class FacultyController extends Controller
     }
 
     /**
+     * Show
+     *
      * Выбрать определенный факультет
      *
      * @param Faculty $faculty
@@ -74,7 +76,9 @@ class FacultyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update
+     *
+     * Изменение определенного факультета
      *
      * @param FacultyRequest $request
      * @param Faculty $faculty
@@ -87,7 +91,9 @@ class FacultyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete
+     *
+     * Удаление определенного факультета
      *
      * @param Faculty $faculty
      * @return false|Application|ResponseFactory|Response
