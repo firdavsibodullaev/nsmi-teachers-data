@@ -32,12 +32,16 @@ class TableRequest extends FormRequest
             return [
                 'FullName' => 'required|string|max:255|unique:tables,FullName',
                 'ShortName' => 'required|string|max:50|unique:tables,ShortName',
+                'Fields' => 'array|required',
+                'Fields.*' => 'integer|exists:fields,Id'
             ];
         }
         $tableId = $this->route('table')->Id;
         return [
             'FullName' => "required|string|max:255|unique:tables,FullName,{$tableId},Id",
             'ShortName' => "required|string|max:50|unique:tables,ShortName,{$tableId},Id",
+            'Fields' => 'array|required',
+            'Fields.*' => 'integer|exists:fields,Id'
         ];
     }
 }

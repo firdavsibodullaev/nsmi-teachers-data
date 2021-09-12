@@ -6,8 +6,6 @@ use App\Interfaces\Table;
 use App\Models\Table as TableModel;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
 /**
@@ -35,11 +33,14 @@ class TableService implements Table
      * Создает новую таблицу
      *
      * @param array $validated
-     * @return Builder|Model
+     * @return TableModel
      */
-    public function create(array $validated)
+    public function create(array $validated): TableModel
     {
-        return TableModel::query()->create($validated)->load('fields');
+        /** @var TableModel $table */
+        $table = TableModel::query()->create($validated)->load('fields');
+        $table->fields()->sync($validated['Fields']);
+        return $table->load('fields');
     }
 
     /**
@@ -51,7 +52,9 @@ class TableService implements Table
      */
     public function update(TableModel $table, array $validated)
     {
-        return tap($table)->update($validated)->load('fields');
+        $table = tap($table)->update($validated);
+        $table->fields()->sync($validated['Fields']);
+        return $table->load('fields');
     }
 
     /**

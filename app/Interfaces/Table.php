@@ -18,9 +18,9 @@ interface Table
 
     /**
      * @param array $validated
-     * @return Builder|Model
+     * @return TableModel
      */
-    public function create(array $validated);
+    public function create(array $validated): TableModel;
 
     /**
      * @param TableModel $table
