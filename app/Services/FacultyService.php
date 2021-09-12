@@ -8,13 +8,13 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
-use App\Interfaces\FacultyInterface;
+use App\Interfaces\FacultiesInterface;
 
 /**
  * Class FacultyService
  * @package App\Services
  */
-class FacultyService implements FacultyInterface
+class FacultyService implements FacultiesInterface
 {
     /**
      * Список факультетов с фильтрацией по названиям и пагинацией
