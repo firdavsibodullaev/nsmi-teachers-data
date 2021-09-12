@@ -18,7 +18,7 @@ Route::namespace('Api')->group(function () {
         Route::middleware('auth:api')->group(function () {
             // Auth
             Route::group(['prefix' => 'auth'], function () {
-                Route::post('login', 'LoginController@login');
+                Route::post('login', 'LoginController@login')->withoutMiddleware('auth:api');
                 Route::post('logout', 'LoginController@logout');
             });
             // Факультет, Кафедра, Пользователи
