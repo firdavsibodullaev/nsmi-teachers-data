@@ -11,7 +11,7 @@ class Field extends BaseModel
     /**
      * @return BelongsToMany
      */
-    public function table(): BelongsToMany
+    public function tables(): BelongsToMany
     {
         return $this->belongsToMany(Table::class, 'field_tables', 'FieldId', 'TableId');
     }
