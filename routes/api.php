@@ -15,10 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 Route::namespace('Api')->group(function () {
     Route::prefix('v1')->group(function () {
-        Route::apiResources([
-            'faculty' => 'FacultyController',
-            'department' => 'DepartmentController',
-            'user' => 'UserController',
-        ]);
+        Route::middleware('auth:api')->group(function () {
+            // Auth
+            Route::group(['prefix' => 'auth'], function () {
+                Route::post('login', 'LoginController@login');
+                Route::post('logout', 'LoginController@logout');
+            });
+            // Факультет, Кафедра, Пользователи
+            Route::apiResources([
+                'faculty' => 'FacultyController',
+                'department' => 'DepartmentController',
+                'user' => 'UserController',
+            ]);
+        });
     });
 });
