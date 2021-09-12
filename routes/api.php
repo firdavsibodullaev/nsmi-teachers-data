@@ -26,6 +26,7 @@ Route::namespace('Api')->group(function () {
                 'faculty' => 'FacultyController',
                 'department' => 'DepartmentController',
                 'user' => 'UserController',
+                'table' => 'TableController'
             ]);
         });
     });
