@@ -21,10 +21,10 @@ class CreateUsersTable extends Migration
             $table->string('Patronymic')->nullable();
             $table->string('Username')->unique();
             $table->string('Password');
-            $table->date('Birth');
-            $table->string('Phone', 13);
-            $table->foreignId('FacultyId')->references('Id')->on('faculties');
-            $table->foreignId('DepartmentId')->references('Id')->on('departments');
+            $table->date('Birth')->nullable();
+            $table->string('Phone', 13)->nullable();
+            $table->foreignId('FacultyId')->nullable()->references('Id')->on('faculties');
+            $table->foreignId('DepartmentId')->nullable()->references('Id')->on('departments');
             $table->string('Post')->nullable();
             $table->string('Photo')->nullable();
             $table->string('Email')->nullable()->unique();

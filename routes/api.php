@@ -17,7 +17,8 @@ Route::namespace('Api')->group(function () {
     Route::prefix('v1')->group(function () {
         Route::apiResources([
             'faculty' => 'FacultyController',
-            'department' => 'DepartmentController'
+            'department' => 'DepartmentController',
+            'user' => 'UserController',
         ]);
     });
 });
