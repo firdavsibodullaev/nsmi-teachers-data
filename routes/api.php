@@ -29,6 +29,11 @@ Route::namespace('Api')->group(function () {
                 'table' => 'TableController',
                 'field' => 'FieldController',
             ]);
+            Route::group([
+                'prefix' => 'constant'
+            ], function() {
+                Route::get('post', 'ConstantController@posts');
+            });
         });
     });
 });

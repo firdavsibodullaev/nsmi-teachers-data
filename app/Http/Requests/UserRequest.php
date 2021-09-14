@@ -71,7 +71,7 @@ class UserRequest extends FormRequest
             'Patronymic' => 'nullable|string|max:255',
             'Username' => "required|string|max:255|min:5|unique:users,Username,{$userId},Id",
             'Password' => [
-                'required',
+                'nullable',
                 'confirmed',
                 'string',
                 'max:255',
