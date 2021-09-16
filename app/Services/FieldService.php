@@ -8,6 +8,7 @@ use App\Models\Field;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -29,6 +30,16 @@ class FieldService implements FieldInterface
             ])
             ->with('tables')
             ->paginate(15);
+    }
+
+    /**
+     * Выборка списка всех полей
+     * @return Collection|QueryBuilder[]
+     */
+    public function getFields()
+    {
+        return QueryBuilder::for(Field::with('tables'))
+            ->get();
     }
 
     /**

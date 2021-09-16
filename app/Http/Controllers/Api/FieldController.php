@@ -40,6 +40,12 @@ class FieldController extends Controller
         return FieldResource::collection($fields);
     }
 
+    public function list(): AnonymousResourceCollection
+    {
+        $fields = $this->fieldService->getFields();
+        return FieldResource::collection($fields);
+    }
+
     /**
      * Store
      *

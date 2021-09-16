@@ -22,6 +22,7 @@ Route::namespace('Api')->group(function () {
                 Route::post('logout', 'LoginController@logout');
             });
             // Факультет, Кафедра, Пользователи
+            Route::get('field/list', 'FieldController@list');
             Route::apiResources([
                 'faculty' => 'FacultyController',
                 'department' => 'DepartmentController',
@@ -31,7 +32,7 @@ Route::namespace('Api')->group(function () {
             ]);
             Route::group([
                 'prefix' => 'constant'
-            ], function() {
+            ], function () {
                 Route::get('post', 'ConstantController@posts');
             });
         });
