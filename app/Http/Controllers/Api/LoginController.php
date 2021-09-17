@@ -26,20 +26,21 @@ class LoginController extends Controller
             'Username' => 'required|string',
             'Password' => 'required|string'
         ]);
-        if (!$this->attempt($cred)) {
+        $user = $this->attempt($cred);
+        if (!$user) {
             return response([
                 'message' => 'Unauthorized'
             ], 401);
         }
-        return $this->sendLoginResponse($request);
+        return $this->sendLoginResponse($request, $user);
     }
 
-    protected function sendLoginResponse(Request $request): JsonResponse
+    protected function sendLoginResponse(Request $request, User $user): JsonResponse
     {
 
         return response()->json([
-            'token' => $request->user()->createToken($request->input('device_name'))->accessToken,
-            'user' => new UserResource($request->user()->load(['faculty', 'department'])),
+            'token' => $user->createToken($request->input('device_name'))->accessToken,
+            'user' => new UserResource($user->load(['faculty', 'department'])),
         ]);
     }
 
@@ -57,15 +58,20 @@ class LoginController extends Controller
 
     /**
      * @param array $creds
-     * @return bool
+     * @return User|false
      */
-    public function attempt(array $creds): bool
+    public function attempt(array $creds)
     {
+        /** @var User $user */
         $user = User::query()->where('Username', '=', $creds['Username'])->first();
         if (!$user) {
             return false;
         }
 
-        return Hash::check($creds['Password'], $user->Password);
+        if (!Hash::check($creds['Password'], $user->Password)) {
+            return false;
+        }
+
+        return $user;
     }
 }
