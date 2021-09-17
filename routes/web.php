@@ -23,7 +23,7 @@ Route::get('pass', function() {
         'Patronymic' => 'Qaxramon o\'g\'li',
         'Phone' => '998931588585',
         'Username' => 'admin',
-        'Password' => bcrypt('admin'),
+        'Password' => \Illuminate\Support\Facades\Hash::make('admin'),
         'Birth' => '1999-05-07',
         'FacultyId' => 1,
         'DepartmentId' => 1,
