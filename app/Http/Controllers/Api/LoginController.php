@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -24,7 +26,7 @@ class LoginController extends Controller
             'Username' => 'required|string',
             'Password' => 'required|string'
         ]);
-        if (!Auth::guard()->attempt($cred)) {
+        if (!$this->attempt($cred)) {
             return response([
                 'message' => 'Unauthorized'
             ], 401);
@@ -51,5 +53,19 @@ class LoginController extends Controller
     {
         $request->user()->token()->revoke();
         return response('', 204);
+    }
+
+    /**
+     * @param array $creds
+     * @return bool
+     */
+    public function attempt(array $creds): bool
+    {
+        $user = User::query()->where('Username', '=', $creds['Username'])->first();
+        if (!$user) {
+            return false;
+        }
+
+        return Hash::check($creds['Password'], $user->Password);
     }
 }
