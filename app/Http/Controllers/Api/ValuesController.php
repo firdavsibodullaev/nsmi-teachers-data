@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ValueRequest;
+use App\Http\Resources\RecordGroupResource;
 use App\Http\Resources\RecordResource;
 use App\Models\Record;
 use App\Models\Table;
@@ -41,7 +42,7 @@ class ValuesController extends Controller
     public function index(Table $table): AnonymousResourceCollection
     {
         $records = $this->valuesService->fetchAllWithPagination($table);
-        return RecordResource::collection($records);
+        return RecordGroupResource::collection($records);
     }
 
     /**

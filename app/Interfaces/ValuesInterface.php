@@ -19,7 +19,7 @@ interface ValuesInterface
 
     /**
      * @param array $validated
-     * @return Value
+     * @return Record
      */
     public function create(array $validated): Record;
 
