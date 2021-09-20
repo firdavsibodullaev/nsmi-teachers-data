@@ -26,9 +26,11 @@ class ValuesService implements ValuesInterface
      */
     public function fetchAllWithPagination(Table $table): LengthAwarePaginator
     {
-        return QueryBuilder::for(Record::with(['values', 'user']))
+        return QueryBuilder::for(Record::withoutGlobalScopes()->with(['values', 'user']))
+            ->select([DB::raw('count(*) as total'), "UserId"])
             ->allowedSorts(['UserId'])
             ->where('TableId', '=', $table->Id)
+            ->groupBy('UserId')
             ->paginate();
     }
 

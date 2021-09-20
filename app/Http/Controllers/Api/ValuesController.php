@@ -41,7 +41,6 @@ class ValuesController extends Controller
     public function index(Table $table): AnonymousResourceCollection
     {
         $records = $this->valuesService->fetchAllWithPagination($table);
-
         return RecordResource::collection($records);
     }
 
