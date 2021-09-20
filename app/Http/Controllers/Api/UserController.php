@@ -7,9 +7,9 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -98,6 +98,7 @@ class UserController extends Controller
      *
      * @param User $user
      * @return false|Application|ResponseFactory|Response
+     * @throws Exception
      */
     public function destroy(User $user)
     {

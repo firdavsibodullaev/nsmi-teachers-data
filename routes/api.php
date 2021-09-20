@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +29,18 @@ Route::namespace('Api')->group(function () {
                 'table' => 'TableController',
                 'field' => 'FieldController',
             ]);
+
+            Route::group([
+                'prefix' => 'record',
+                'as' => 'record.'
+            ], function () {
+                Route::get('{table}', [\App\Http\Controllers\Api\ValuesController::class, 'index']);
+                Route::get('show/{record}', [\App\Http\Controllers\Api\ValuesController::class, 'show']);
+                Route::post('store', [\App\Http\Controllers\Api\ValuesController::class, 'store']);
+                Route::put('update/{record}', [\App\Http\Controllers\Api\ValuesController::class, 'update']);
+                Route::delete('{record}', [\App\Http\Controllers\Api\ValuesController::class, 'destroy']);
+            });
+
             Route::group([
                 'prefix' => 'constant'
             ], function () {
