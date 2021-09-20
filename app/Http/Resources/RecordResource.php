@@ -18,8 +18,6 @@ class RecordResource extends JsonResource
         return [
             'Id' => $this->Id,
             'Values' => ValueResource::collection($this->values),
-            'User' => new UserResource($this->user),
-            'Table' => new TableResource($this->whenLoaded('table'))
         ];
     }
 }

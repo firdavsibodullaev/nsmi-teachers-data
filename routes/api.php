@@ -35,6 +35,7 @@ Route::namespace('Api')->group(function () {
                 'as' => 'record.'
             ], function () {
                 Route::get('{table}', [\App\Http\Controllers\Api\ValuesController::class, 'index']);
+                Route::get('/{table}/{user}', [\App\Http\Controllers\Api\ValuesController::class, 'list']);
                 Route::get('show/{record}', [\App\Http\Controllers\Api\ValuesController::class, 'show']);
                 Route::post('store', [\App\Http\Controllers\Api\ValuesController::class, 'store']);
                 Route::put('update/{record}', [\App\Http\Controllers\Api\ValuesController::class, 'update']);

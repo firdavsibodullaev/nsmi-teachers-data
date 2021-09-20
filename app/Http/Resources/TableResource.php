@@ -19,7 +19,7 @@ class TableResource extends JsonResource
             'Id' => $this->Id,
             'FullName' => $this->FullName,
             'ShortName' => $this->ShortName,
-            'Fields' => FieldResource::collection($this->whenLoaded('fields')),
+            'Fields' => FieldResource::collection($this->fields),
         ];
     }
 }

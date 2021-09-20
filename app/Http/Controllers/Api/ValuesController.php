@@ -8,6 +8,7 @@ use App\Http\Resources\RecordGroupResource;
 use App\Http\Resources\RecordResource;
 use App\Models\Record;
 use App\Models\Table;
+use App\Models\User;
 use App\Services\ValuesService;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -43,6 +44,20 @@ class ValuesController extends Controller
     {
         $records = $this->valuesService->fetchAllWithPagination($table);
         return RecordGroupResource::collection($records);
+    }
+
+    /**
+     * @param Table $table
+     * @param User $user
+     * @return AnonymousResourceCollection
+     */
+    public function list(Table $table, User $user): AnonymousResourceCollection
+    {
+        $records = $this->valuesService->list($table, $user);
+        return RecordResource::collection($records)->additional([
+            'Table' => $table,
+            'User' => $user
+        ]);
     }
 
     /**

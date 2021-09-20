@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Interfaces\ValuesInterface;
 use App\Models\Record;
 use App\Models\Table;
+use App\Models\User;
 use App\Models\Value;
+use App\Scopes\OrderByIdScope;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
@@ -26,11 +28,24 @@ class ValuesService implements ValuesInterface
      */
     public function fetchAllWithPagination(Table $table): LengthAwarePaginator
     {
-        return QueryBuilder::for(Record::withoutGlobalScopes()->with(['values', 'user']))
+        return QueryBuilder::for(Record::withoutGlobalScopes([OrderByIdScope::class])->with(['user']))
             ->select([DB::raw('count(*) as total'), "UserId"])
             ->allowedSorts(['UserId'])
             ->where('TableId', '=', $table->Id)
             ->groupBy('UserId')
+            ->paginate();
+    }
+
+    /**
+     * @param Table $table
+     * @param User $user
+     * @return LengthAwarePaginator
+     */
+    public function list(Table $table, User $user): LengthAwarePaginator
+    {
+        return QueryBuilder::for(Record::with(['values', 'table']))
+            ->where('TableId', '=', $table->Id)
+            ->where('UserId', '=', $user->Id)
             ->paginate();
     }
 
