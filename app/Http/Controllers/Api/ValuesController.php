@@ -55,8 +55,8 @@ class ValuesController extends Controller
     {
         $records = $this->valuesService->list($table, $user);
         return RecordResource::collection($records)->additional([
-            'Table' => $table,
-            'User' => $user
+            'table' => $table,
+            'user' => $user
         ]);
     }
 
