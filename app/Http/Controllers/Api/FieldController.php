@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Constants\FieldTypeConstants;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FieldRequest;
 use App\Http\Resources\FieldResource;
@@ -40,10 +41,21 @@ class FieldController extends Controller
         return FieldResource::collection($fields);
     }
 
+    /**
+     * @return AnonymousResourceCollection
+     */
     public function list(): AnonymousResourceCollection
     {
         $fields = $this->fieldService->getFields();
         return FieldResource::collection($fields);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFieldTypes(): array
+    {
+        return FieldTypeConstants::translatedList();
     }
 
     /**

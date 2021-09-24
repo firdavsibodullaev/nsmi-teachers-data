@@ -22,6 +22,7 @@ Route::namespace('Api')->group(function () {
             });
             // Факультет, Кафедра, Пользователи
             Route::get('field/list', 'FieldController@list');
+            Route::get('field/types', 'FieldController@getFieldTypes');
             Route::apiResources([
                 'faculty' => 'FacultyController',
                 'department' => 'DepartmentController',
@@ -37,7 +38,8 @@ Route::namespace('Api')->group(function () {
                 Route::get('{table}', [\App\Http\Controllers\Api\ValuesController::class, 'index']);
                 Route::get('/{table}/{user}', [\App\Http\Controllers\Api\ValuesController::class, 'list']);
                 Route::get('show/{record}', [\App\Http\Controllers\Api\ValuesController::class, 'show']);
-                Route::post('store', [\App\Http\Controllers\Api\ValuesController::class, 'store']);
+                Route::post('upload', [\App\Http\Controllers\Api\ValuesController::class, 'upload']);
+                Route::post('{record}', [\App\Http\Controllers\Api\ValuesController::class, 'store']);
                 Route::put('update/{record}', [\App\Http\Controllers\Api\ValuesController::class, 'update']);
                 Route::delete('{record}', [\App\Http\Controllers\Api\ValuesController::class, 'destroy']);
             });

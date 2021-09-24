@@ -5,7 +5,6 @@ namespace App\Interfaces;
 
 use App\Models\Record;
 use App\Models\Table;
-use App\Models\Value;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -21,7 +20,7 @@ interface ValuesInterface
      * @param array $validated
      * @return Record
      */
-    public function create(array $validated): Record;
+    public function create(Record $record, array $validated): Record;
 
     /**
      * @param Record $record

@@ -17,7 +17,7 @@ class CreateRecordsTable extends Migration
         Schema::create('records', function (Blueprint $table) {
             $table->id('Id');
             $table->foreignId('UserId')->references('Id')->on('users');
-            $table->foreignId('TableId')->references('Id')->on('tables');
+            $table->foreignId('TableId')->nullable()->references('Id')->on('tables');
             $table->timestamp(BaseModel::CREATED_AT)->useCurrent();
             $table->timestamp(BaseModel::UPDATED_AT)->useCurrent();
             $table->softDeletes(BaseModel::DELETED_AT);

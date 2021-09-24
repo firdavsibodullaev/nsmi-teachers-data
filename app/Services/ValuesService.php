@@ -32,6 +32,7 @@ class ValuesService implements ValuesInterface
             ->select([DB::raw('count(*) as total'), "UserId"])
             ->allowedSorts(['UserId'])
             ->where('TableId', '=', $table->Id)
+            ->where('Status', '=', true)
             ->groupBy('UserId')
             ->paginate();
     }
@@ -46,28 +47,24 @@ class ValuesService implements ValuesInterface
         return QueryBuilder::for(Record::with(['values', 'table']))
             ->where('TableId', '=', $table->Id)
             ->where('UserId', '=', $user->Id)
+            ->where('Status', '=', true)
             ->paginate();
     }
 
     /**
      * @throws Exception
      */
-    public function create(array $validated): Record
+    public function create(Record $record, array $validated): Record
     {
         DB::beginTransaction();
         try {
-            /** @var Record $record */
-            $record = Record::query()->create([
-                'UserId' => auth()->id(),
-                'TableId' => $validated['TableId']
-            ]);
             $valuesArray = [];
             foreach ($validated['Values'] as $value) {
-                $value['File'] = $this->file($value);
                 $value['RecordId'] = $record->Id;
                 array_push($valuesArray, $value);
             }
             Value::query()->insert($valuesArray);
+            $record = tap($record)->update(['Status' => true, 'TableId' => $validated['TableId']]);
             DB::commit();
         } catch (Exception $exception) {
             DB::rollBack();
@@ -75,6 +72,41 @@ class ValuesService implements ValuesInterface
         }
 
         return $record->load(['values', 'user', 'table']);
+    }
+
+    /**
+     * @param array $validated
+     * @return Record
+     * @throws Exception
+     */
+    public function uploadFile(array $validated): Record
+    {
+        DB::beginTransaction();
+        try {
+
+            $this->deleteRecords();
+            /** @var Record $record */
+            $record = Record::query()->create([
+                'UserId' => auth()->id(),
+            ]);
+            /** @var UploadedFile $file */
+            $file = $validated['file'];
+            $file_name = 'file_' . date('Y-m-d_H-i-s') . '_' . $file->getClientOriginalName();
+            $file->storeAs('files', $file_name);
+            Value::query()->create([
+                'RecordId' => $record->Id,
+                'File' => $file_name,
+                'Value' => $file->getClientOriginalName(),
+                'FieldId' => $validated['FieldId'],
+            ]);
+            DB::commit();
+        } catch (Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+
+        return $record;
+
     }
 
     /**
@@ -115,24 +147,6 @@ class ValuesService implements ValuesInterface
     }
 
     /**
-     * @param array $value
-     * @return string|null
-     */
-    private function file(array $value): ?string
-    {
-        if (!isset($value['File'])) {
-            return null;
-        }
-
-        /** @var UploadedFile $file */
-        $file = $value['File'];
-
-        $file_name = 'file_' . date('Y-m-d_H-i-s') . '_' . $file->getClientOriginalName();
-        $file->storeAs('files', $file_name);
-        return $file_name;
-    }
-
-    /**
      * @param Record $record
      * @param array $value
      * @return string|null
@@ -146,7 +160,24 @@ class ValuesService implements ValuesInterface
             ->where('FieldId', $value['FieldId'])
             ->where('RecordId', '=', $record->Id)
             ->first();
-        Storage::delete("storage/files/{$dValue->File}");
+        Storage::delete("files/{$dValue->File}");
         return $this->file($value);
+    }
+
+    protected function deleteRecords()
+    {
+        $records = Record::query()
+            ->withoutGlobalScopes()
+            ->with('values')
+            ->where('UserId', '=', auth()->id())
+            ->where('Status', '=', false)
+            ->get();
+        foreach ($records as $record) {
+            foreach ($record->values as $value) {
+                Storage::delete("files/{$value->File}");
+            }
+            $record->values()->forceDelete();
+            $record->forceDelete();
+        }
     }
 }

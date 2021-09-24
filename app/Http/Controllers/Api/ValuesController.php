@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileUploadRequest;
 use App\Http\Requests\ValueRequest;
 use App\Http\Resources\RecordGroupResource;
 use App\Http\Resources\RecordResource;
+use App\Http\Resources\TableResource;
+use App\Http\Resources\UserResource;
 use App\Models\Record;
 use App\Models\Table;
 use App\Models\User;
+use App\Models\Value;
 use App\Services\ValuesService;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -55,8 +59,8 @@ class ValuesController extends Controller
     {
         $records = $this->valuesService->list($table, $user);
         return RecordResource::collection($records)->additional([
-            'table' => $table,
-            'user' => $user
+            'table' => new TableResource($table),
+            'user' => new UserResource($user)
         ]);
     }
 
@@ -74,10 +78,21 @@ class ValuesController extends Controller
      * @return RecordResource
      * @throws Exception
      */
-    public function store(ValueRequest $request): RecordResource
+    public function store(ValueRequest $request, Record $record): RecordResource
     {
-        $record = $this->valuesService->create($request->validated());
+        $record = $this->valuesService->create($record, $request->validated());
 
+        return new RecordResource($record);
+    }
+
+    /**
+     * @param FileUploadRequest $request
+     * @return RecordResource
+     * @throws Exception
+     */
+    public function upload(FileUploadRequest $request): RecordResource
+    {
+        $record = $this->valuesService->uploadFile($request->validated());
         return new RecordResource($record);
     }
 

@@ -8,13 +8,13 @@ class FieldTypeConstants
 {
     const STRING = 'string';
 
-    const INTEGER = 'integer';
-
-    const DOUBLE = 'double';
+    const NUMBER = 'number';
 
     const DATE = 'date';
 
     const TEXT = 'text';
+
+    const FILE = 'file';
 
     /**
      * @return string[]
@@ -23,10 +23,10 @@ class FieldTypeConstants
     {
         return [
             self::STRING,
-            self::INTEGER,
-            self::DOUBLE,
+            self::NUMBER,
             self::DATE,
             self::TEXT,
+            self::FILE,
         ];
     }
 
@@ -37,10 +37,10 @@ class FieldTypeConstants
     {
         return [
             self::STRING => 'Строка',
-            self::INTEGER => 'Целое число',
-            self::DOUBLE => 'Число с плавающей точкой',
+            self::NUMBER => 'Целое число',
             self::DATE => 'Дата',
             self::TEXT => 'Текст',
+            self::FILE => 'Файл',
         ];
     }
 }

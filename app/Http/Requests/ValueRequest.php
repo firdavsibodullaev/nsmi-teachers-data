@@ -36,17 +36,13 @@ class ValueRequest extends FormRequest
                 'TableId' => 'required|integer|exists:tables,Id',
                 'Values' => 'required|array',
                 'Values.*' => 'required|array',
-                'Values.*.File' => 'nullable|file',
                 'Values.*.Value' => 'string|required|max:1000',
-                'Values.*.FieldId' => 'integer|required|exists:fields,Id'
             ];
         }
         return [
             'Values' => 'required|array',
             'Values.*' => 'required|array',
-            'Values.*.File' => 'nullable|file',
             'Values.*.Value' => 'string|required|max:1000',
-            'Values.*.FieldId' => 'integer|required|exists:fields,Id'
         ];
     }
 }
