@@ -38,7 +38,8 @@ class TableService implements Table
     public function create(array $validated): TableModel
     {
         /** @var TableModel $table */
-        $table = TableModel::query()->create($validated)->load('fields');
+        $table = TableModel::query()->create($validated);
+        $this->addOrder($validated);
         $table->fields()->sync($validated['Fields']);
         return $table->load('fields');
     }
@@ -67,5 +68,12 @@ class TableService implements Table
     public function delete(TableModel $table): ?bool
     {
         return $table->delete();
+    }
+
+    protected function addOrder(array &$validated)
+    {
+        foreach ($validated as $key => $value) {
+            $value['order'] = ($key + 1);
+        }
     }
 }
