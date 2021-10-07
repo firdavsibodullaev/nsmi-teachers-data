@@ -37,12 +37,14 @@ class ValueRequest extends FormRequest
                 'Values' => 'required|array',
                 'Values.*' => 'required|array',
                 'Values.*.Value' => 'string|required|max:1000',
+                'Values.*.FieldId' => 'required|exists:fields,Id',
             ];
         }
         return [
             'Values' => 'required|array',
             'Values.*' => 'required|array',
             'Values.*.Value' => 'string|required|max:1000',
+            'Values.*.FieldId' => 'required|exists:fields,Id',
         ];
     }
 }

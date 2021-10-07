@@ -17,6 +17,7 @@ class RecordResource extends JsonResource
     {
         return [
             'Id' => $this->Id,
+            'Table' => new TableResource($this->whenLoaded('table')),
             'Values' => ValueResource::collection($this->values),
         ];
     }

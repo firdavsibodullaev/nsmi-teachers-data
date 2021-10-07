@@ -24,7 +24,7 @@ class FileUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'FieldId' => 'required|integer',
+            'FieldId' => 'required|exists:fields,Id',
             'file' => 'file|required',
         ];
     }

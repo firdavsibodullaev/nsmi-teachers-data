@@ -75,10 +75,11 @@ class ValuesController extends Controller
 
     /**
      * @param ValueRequest $request
+     * @param Record|null $record
      * @return RecordResource
      * @throws Exception
      */
-    public function store(ValueRequest $request, Record $record): RecordResource
+    public function store(ValueRequest $request, ?Record $record = null): RecordResource
     {
         $record = $this->valuesService->create($record, $request->validated());
 
@@ -90,9 +91,21 @@ class ValuesController extends Controller
      * @return RecordResource
      * @throws Exception
      */
-    public function upload(FileUploadRequest $request): RecordResource
+    public function upload(FileUploadRequest $request, Table $table): RecordResource
     {
-        $record = $this->valuesService->uploadFile($request->validated());
+        $record = $this->valuesService->uploadFile($table, $request->validated());
+        return new RecordResource($record);
+    }
+
+    /**
+     * @param FileUploadRequest $request
+     * @param Record $record
+     * @return RecordResource
+     * @throws Exception
+     */
+    public function uploadUpdate(FileUploadRequest $request, Record $record): RecordResource
+    {
+        $record = $this->valuesService->uploadUpdate($record, $request->validated());
         return new RecordResource($record);
     }
 

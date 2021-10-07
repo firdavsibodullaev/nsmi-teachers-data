@@ -12,12 +12,16 @@ class ValueResource extends JsonResource
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
+        $value = $this->Value;
+        if ($this->field->Type === 'date') {
+            $value = date('Y-m-d', strtotime($this->Value));
+        }
         return [
             'Id' => $this->Id,
-            'Value' => $this->Value,
-            'Field' => $this->field,
+            'Value' => $value,
+            'Field' => new FieldResource($this->field),
             'File' => $this->File ? asset("storage/files/{$this->File}") : null
         ];
     }
